@@ -6,13 +6,23 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GraphPane extends Pane {
 
     private double currentHeight;
     private double currentWidth;
+    private double stageWidthExtra;
+
+    /*
+     * Lol you actually need this or else boolean bindings give up (they are weak listeners)
+     */
+    private List<BooleanBinding> bindingsForReference = new ArrayList<>();
 
 
-    public GraphPane(double width, double height) {
+    public GraphPane(double stageWidthExtra, double width, double height) {
+        this.stageWidthExtra = stageWidthExtra;
         setPrefWidth(width);
         setPrefHeight(height);
 
@@ -38,24 +48,26 @@ public class GraphPane extends Pane {
 
     public void registerBoxToSizeListener(Stage parent, DragableBox box){
 
-        parent.widthProperty().lessThan(box.translateXProperty().add(box.getX() + box.getWidth()))
-                .addListener((observableValue, aBoolean, t1) -> {
-                if (t1 && box.isDragging())
-                    parent.setWidth(box.translateXProperty().get() + box.getWidth() + box.getX());
+        BooleanBinding parentTooSkinny = parent.widthProperty().subtract(stageWidthExtra)
+                .lessThan(box.translateXProperty().add(box.getX() + box.getWidth()));
+
+        bindingsForReference.add(parentTooSkinny);
+
+        parentTooSkinny.addListener((observableValue, aBoolean, t1) -> {
+                if (t1 && box.isDragging()) {
+                    parent.setWidth(box.translateXProperty().get() + box.getWidth() + box.getX() + stageWidthExtra);
+                }
         });
 
-        parent.heightProperty().lessThan(box.translateYProperty().add(box.getHeight() + box.getY()))
-                .addListener((observableValue, aBoolean, t1) -> {
+        BooleanBinding parentTooShort = parent.heightProperty()
+                .lessThan(box.translateYProperty().add(box.getHeight() + box.getY()));
+
+        bindingsForReference.add(parentTooShort);
+
+        parentTooShort.addListener((observableValue, aBoolean, t1) -> {
                 if (t1 && box.isDragging())
                     parent.setHeight(box.translateYProperty().get() + box.getHeight() + box.getY());
         });
-
-
-//        box.translateXProperty().lessThan(0)
-//                .addListener(((observableValue, aBoolean, t1) -> {
-//                if (t1 && box.isDragging())
-//                    parent.set
-//        }));
     }
 
 

@@ -1,7 +1,10 @@
 package com.testfx;
 
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 
 import java.util.Optional;
@@ -10,25 +13,30 @@ public class DragableBox extends Rectangle {
 
     private Optional<Point2D> previousDragPosition = Optional.empty();
 
+    private Bounds boundary;
+
     public boolean isDragging() {
         return previousDragPosition.isPresent();
     }
 
-    public DragableBox(double x, double y, double width, double height) {
+    public DragableBox(Pane boundary, double x, double y, double width, double height) {
         super(0, 0, width, height);
         setTranslateX(x);
         setTranslateY(y);
+        ReadOnlyObjectProperty<Bounds> boundsReadOnlyObjectProperty = boundary.boundsInParentProperty();
 
         addEventHandler(MouseEvent.DRAG_DETECTED, mouseEvent -> {
 
-            if (mouseEvent.getSceneX() < 0 || mouseEvent.getSceneY() < 0)
+            this.boundary = boundsReadOnlyObjectProperty.get();
+
+            if (mouseEvent.getSceneX() < this.boundary.getMinX()|| mouseEvent.getSceneY() < this.boundary.getMinY())
                 return;
 
             previousDragPosition = Optional.of(new Point2D(mouseEvent.getScreenX(), mouseEvent.getScreenY()));
         });
 
         addEventHandler(MouseEvent.MOUSE_DRAGGED, mouseEvent -> {
-
+            this.boundary = boundsReadOnlyObjectProperty.get();
             Point2D dragPosition = new Point2D(mouseEvent.getScreenX(), mouseEvent.getScreenY());
 
             if (getTranslateX() < 0) {
@@ -41,7 +49,7 @@ public class DragableBox extends Rectangle {
                 return;
             }
 
-            if (mouseEvent.getSceneX() < 0 || mouseEvent.getSceneY() < 0)
+            if (mouseEvent.getSceneX() < this.boundary.getMinX() || mouseEvent.getSceneY() < this.boundary.getMinY())
                 return;
 
             if (previousDragPosition.isEmpty())
@@ -61,6 +69,13 @@ public class DragableBox extends Rectangle {
             previousDragPosition = Optional.empty();
         });
 
+        boundary.widthProperty().addListener(((observableValue, number, t1) -> {
+            if (t1.doubleValue() < getTranslateX() + (.5 * getWidth())){
+                this.setVisible(false);
+            } else {
+                this.setVisible(true);
+            }
+        }));
 
 
     }
