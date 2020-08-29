@@ -3,8 +3,8 @@ package com.testfx;
 import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -18,6 +18,8 @@ public class Client extends Application{
     private static final int LEFT_SIDE_WIDTH = 200;
     private static final int RIGHT_SIDE_WIDTH = 200;
 
+    private ScrollPane scrollPane;
+
     private Parent createRoot() {
         BorderPane root = new BorderPane();
         GraphPane gridRoot = new GraphPane(RIGHT_SIDE_WIDTH + RIGHT_SIDE_WIDTH, WIDTH, HEIGHT);
@@ -30,22 +32,21 @@ public class Client extends Application{
         root.setRight(vBoxRight);
 
 
-        Pane pane = new Pane();
-        pane.getChildren().add(gridRoot);
-        root.setCenter(pane);
+        scrollPane = new ScrollPane(gridRoot);
+        scrollPane.setPannable(false);
 
-        gridRoot.addSizeListeners(pane);
+        root.setCenter(scrollPane);
 
-        DragableBox dragableBox = new DragableBox(pane, 100, 100, 50, 50);
-        pane.getChildren().add(dragableBox);
-        gridRoot.registerBoxToSizeListener(this.stage, dragableBox);
+        DragableBox dragableBox = new DragableBox(scrollPane, gridRoot, 100, 100, 50, 50);
+        gridRoot.addBox(dragableBox);
+//        gridRoot.registerBoxToSizeListener(this.stage, dragableBox);
 
-        DragableBox dragableBox1 = new DragableBox(pane, 400, 100, 50, 50);
+        DragableBox dragableBox1 = new DragableBox(scrollPane, gridRoot, 400, 100, 50, 50);
         dragableBox1.setFill(Color.AZURE);
         dragableBox1.setStrokeWidth(2);
         dragableBox1.setStroke(Color.BLACK);
-        pane.getChildren().add(dragableBox1);
-        gridRoot.registerBoxToSizeListener(this.stage, dragableBox1);
+        gridRoot.addBox(dragableBox1);
+//        gridRoot.registerBoxToSizeListener(this.stage, dragableBox1);
 
 
         return root;
