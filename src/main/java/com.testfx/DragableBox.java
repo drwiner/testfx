@@ -25,6 +25,7 @@ public class DragableBox extends Rectangle {
         setTranslateY(y);
         ReadOnlyObjectProperty<Bounds> boundsReadOnlyObjectProperty = boundary.boundsInParentProperty();
 
+
         addEventHandler(MouseEvent.DRAG_DETECTED, mouseEvent -> {
 
             this.boundary = boundsReadOnlyObjectProperty.get();
@@ -34,6 +35,7 @@ public class DragableBox extends Rectangle {
 
             previousDragPosition = Optional.of(new Point2D(mouseEvent.getScreenX(), mouseEvent.getScreenY()));
         });
+
 
         addEventHandler(MouseEvent.MOUSE_DRAGGED, mouseEvent -> {
             this.boundary = boundsReadOnlyObjectProperty.get();
@@ -49,7 +51,11 @@ public class DragableBox extends Rectangle {
                 return;
             }
 
+//            mouseEvent.getTarget()
+
+
             if (mouseEvent.getSceneX() < this.boundary.getMinX() || mouseEvent.getSceneY() < this.boundary.getMinY())
+
                 return;
 
             if (previousDragPosition.isEmpty())
@@ -65,17 +71,28 @@ public class DragableBox extends Rectangle {
             this.setTranslateY(getTranslateY() - delta.getY());
         });
 
+
+
         addEventHandler(MouseEvent.MOUSE_RELEASED, mouseEvent -> {
             previousDragPosition = Optional.empty();
         });
 
-        boundary.widthProperty().addListener(((observableValue, number, t1) -> {
-            if (t1.doubleValue() < getTranslateX() + (.5 * getWidth())){
-                this.setVisible(false);
-            } else {
-                this.setVisible(true);
-            }
-        }));
+
+//        boundary.widthProperty().addListener((observableValue, number, t1) -> {
+//            if (t1.doubleValue() < getTranslateX() + (.5 * getWidth())){
+//                setVisible(false);
+//            } else {
+//                setVisible(true);
+//            }
+//        });
+//
+//        boundary.heightProperty().addListener((observableValue, number, t1) -> {
+//            if (t1.doubleValue() < getTranslateY() + (.5 * getHeight())) {
+//                setVisible(false);
+//            } else {
+//                setVisible(true);
+//            }
+//        });
 
 
     }
