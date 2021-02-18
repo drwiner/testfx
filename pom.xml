@@ -35,7 +35,15 @@
                 <version>0.0.1</version>
                 <configuration>
                     <mainClass>com.testfx.Client</mainClass>
-                    <executable>/users/davidwiner/jdk-11.0.8.jdk/contents/Home/bin/java</executable>
+                    <executable>/Users/drw/jdk-11.0.9.jdk/Contents/Home/bin/java</executable>
+                    <options>
+                        <option>--add-exports</option>
+                        <option>javafx.base/com.sun.javafx.event=org.controlsfx.controls</option>
+                        <option>--add-exports</option>
+                        <option>javafx.graphics/com.sun.javafx.scene=org.controlsfx.controls</option>
+                        <option>--add-exports</option>
+                        <option>javafx.graphics/com.sun.javafx.scene.traversal=org.controlsfx.controls</option>
+                    </options>
                 </configuration>
             </plugin>
         </plugins>

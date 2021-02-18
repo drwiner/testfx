@@ -16,10 +16,6 @@ public class DragableBox extends Rectangle {
 
     private Bounds scrollBoundary;
 
-    public boolean isDragging() {
-        return previousDragPosition.isPresent();
-    }
-
     public DragableBox(ScrollPane scrollPane, Pane gridRoot, double x, double y, double width, double height) {
         super(0, 0, width, height);
         setTranslateX(x);
@@ -52,19 +48,8 @@ public class DragableBox extends Rectangle {
             }
 
             if (mouseEvent.getSceneX() < this.scrollBoundary.getMinX() || mouseEvent.getSceneY() < this.scrollBoundary.getMinY()) {
-//                System.out.println("HERE");
                 return;
             }
-
-//            System.out.println("parent scrollBoundary minX: " + this.scrollBoundary.getMinX());
-//            System.out.println("parent scrollBoundary in local: " + scrollBoundary.getBoundsInLocal().getMinX());
-//            System.out.println("parent scrollBoundary parent max X: " + scrollBoundary.getBoundsInParent().getMaxX());
-//            System.out.println("mouseEvent sceneX: " + mouseEvent.getSceneX());
-//            System.out.println("scrollpane viewport max X: " + scrollPane.getViewportBounds().getMaxX());
-//            System.out.println("scrollpane viewport min X: " + scrollPane.getViewportBounds().getMinX());
-//            System.out.println("scrollpane width: " + scrollPane.getWidth());
-//            System.out.println("scroll pane layout: " + scrollPane.getLayoutX());
-//            System.out.println("scroll pane bounds min x: " + scrollPane.getBoundsInParent().getMinX());
 
             if (mouseEvent.getSceneX() > scrollPane.getViewportBounds().getMaxX() + scrollPane.getBoundsInParent().getMinX()){
                 gridRoot.setMinWidth(getTranslateX() + getWidth());
@@ -88,7 +73,6 @@ public class DragableBox extends Rectangle {
             this.setTranslateX(getTranslateX() - delta.getX());
             this.setTranslateY(getTranslateY() - delta.getY());
 
-//            mouseEvent.consume();
         });
 
         addEventHandler(MouseEvent.MOUSE_RELEASED, mouseEvent -> {

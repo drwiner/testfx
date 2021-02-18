@@ -22,7 +22,7 @@ public class Client extends Application{
 
     private Parent createRoot() {
         BorderPane root = new BorderPane();
-        GraphPane gridRoot = new GraphPane(RIGHT_SIDE_WIDTH + RIGHT_SIDE_WIDTH, WIDTH, HEIGHT);
+        GraphPane gridRoot = new GraphPane(WIDTH, HEIGHT);
 
         VBox vBoxLeft = new VBox();
         vBoxLeft.setPrefWidth(LEFT_SIDE_WIDTH);
@@ -31,7 +31,6 @@ public class Client extends Application{
         root.setLeft(vBoxLeft);
         root.setRight(vBoxRight);
 
-
         scrollPane = new ScrollPane(gridRoot);
         scrollPane.setPannable(false);
 
@@ -39,15 +38,12 @@ public class Client extends Application{
 
         DragableBox dragableBox = new DragableBox(scrollPane, gridRoot, 100, 100, 50, 50);
         gridRoot.addBox(dragableBox);
-//        gridRoot.registerBoxToSizeListener(this.stage, dragableBox);
 
         DragableBox dragableBox1 = new DragableBox(scrollPane, gridRoot, 400, 100, 50, 50);
         dragableBox1.setFill(Color.AZURE);
         dragableBox1.setStrokeWidth(2);
         dragableBox1.setStroke(Color.BLACK);
         gridRoot.addBox(dragableBox1);
-//        gridRoot.registerBoxToSizeListener(this.stage, dragableBox1);
-
 
         return root;
     }
