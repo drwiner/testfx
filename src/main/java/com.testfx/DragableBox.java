@@ -6,18 +6,25 @@ import javafx.geometry.Point2D;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 import java.util.Optional;
 
-public class DragableBox extends Rectangle {
+public class DragableBox extends Pane {
 
+    private final Rectangle rectangle;
     private Optional<Point2D> previousDragPosition = Optional.empty();
 
     private Bounds scrollBoundary;
 
+    private String latexText = "\\langle x, y \\rangle";
+
     public DragableBox(ScrollPane scrollPane, Pane gridRoot, double x, double y, double width, double height) {
-        super(0, 0, width, height);
+        super();
+        setWidth(width);
+        setHeight(height);
         setTranslateX(x);
         setTranslateY(y);
         ReadOnlyObjectProperty<Bounds> boundsReadOnlyObjectProperty = scrollPane.boundsInParentProperty();
@@ -79,7 +86,37 @@ public class DragableBox extends Rectangle {
             previousDragPosition = Optional.empty();
         });
 
+        StackPane stackPane = new StackPane();
+        rectangle = new Rectangle( width, height);
+        stackPane.getChildren().add(rectangle);
+
+        getChildren().add(stackPane);
+        
+        LateXCanvas lateXCanvas = new LateXCanvas("\\hspace{0.17cm} \\tanh*\\sigma", 14);
+
+        lateXCanvas.widthProperty().bind(stackPane.widthProperty());
+        lateXCanvas.heightProperty().bind(stackPane.heightProperty());
 
 
+        stackPane.getChildren().add(lateXCanvas);
+
+//        lateXCanvas.draw();
+
+//        LateXMathControl lateXMathControl = new LateXMathControl(latexText);
+//        stackPane.getChildren().add(lateXMathControl);
+
+
+    }
+
+    public void setFill(Color azure) {
+        rectangle.setFill(azure);
+    }
+
+    public void setStrokeWidth(int i) {
+        rectangle.setStrokeWidth(i);
+    }
+
+    public void setStroke(Color black) {
+        rectangle.setStroke(black);
     }
 }

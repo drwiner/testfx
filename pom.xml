@@ -18,6 +18,17 @@
             <artifactId>javafx-controls</artifactId>
             <version>11.0.2</version>
         </dependency>
+        <dependency>
+            <groupId>org.scilab.forge</groupId>
+            <artifactId>jlatexmath</artifactId>
+            <version>1.0.7</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jfree</groupId>
+            <artifactId>fxgraphics2d</artifactId>
+            <version>1.8</version>
+        </dependency>
+
     </dependencies>
     <build>
         <plugins>
@@ -36,14 +47,6 @@
                 <configuration>
                     <mainClass>com.testfx.Client</mainClass>
                     <executable>/Users/drw/jdk-11.0.9.jdk/Contents/Home/bin/java</executable>
-                    <options>
-                        <option>--add-exports</option>
-                        <option>javafx.base/com.sun.javafx.event=org.controlsfx.controls</option>
-                        <option>--add-exports</option>
-                        <option>javafx.graphics/com.sun.javafx.scene=org.controlsfx.controls</option>
-                        <option>--add-exports</option>
-                        <option>javafx.graphics/com.sun.javafx.scene.traversal=org.controlsfx.controls</option>
-                    </options>
                 </configuration>
             </plugin>
         </plugins>
